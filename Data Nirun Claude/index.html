@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DATA NIRUN | เปลี่ยนข้อมูลให้เป็นระบบ พร้อมเติบโต</title>
+<meta name="description" content="DATA NIRUN วางระบบข้อมูลธุรกิจ จัดระเบียบองค์กร และบริหารการเงินเชิงกลยุทธ์ สำหรับ SMEs และทีมที่กำลังเติบโต">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== CONFIG (ตั้งค่าใน <script> ด้านล่าง) ===== */
+:root{
+  --navy:#12111E; --dpurple:#28213C; --navy2:#3A3F67;
+  --accent:#7C5CFC; --purple:#7452A9; --off:#E5E5E8;
+  --bg:#12111E; --bg2:#161524; --card:#1B1A2A; --line:rgba(229,229,232,.10);
+  --muted:rgba(229,229,232,.62); --faint:rgba(229,229,232,.42);
+  --grad:linear-gradient(90deg,#9C84FF 0%,#7C5CFC 45%,#7452A9 100%);
+  --r:14px; --max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--off);font-family:"Noto Sans Thai","Inter",system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
+.en{font-family:"Inter","Noto Sans Thai",sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+.hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{font-family:Inter,sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.eyebrow b{color:#B9A8FF;font-weight:600}
+section{padding:88px 0;border-top:1px solid var(--line)}
+h2{font-size:clamp(30px,4.6vw,46px);line-height:1.25;font-weight:600;letter-spacing:-.01em;margin:18px 0 22px}
+.sub{color:var(--muted);font-size:14px}
+.arrow{width:16px;height:16px;flex:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* Header */
+header{position:sticky;top:0;z-index:40;background:rgba(18,17,30,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:78px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo svg{width:30px;height:30px}
+.logo span{font-family:Inter,sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;line-height:1.15}
+.logo i{color:var(--accent);font-style:normal}
+.nav-r{display:flex;align-items:center;gap:22px}
+.nav-links{display:none;gap:28px;font-size:14px;color:var(--muted)}
+.nav-links a:hover{color:var(--off)}
+.btn-ghost{display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(229,229,232,.28);padding:12px 16px;border-radius:8px;font-size:13px;font-weight:600;transition:.2s}
+.btn-ghost:hover{border-color:var(--accent);background:rgba(124,92,252,.12)}
+.burger{width:40px;height:40px;display:grid;place-items:center}
+.burger span,.burger span:before,.burger span:after{display:block;width:22px;height:2px;background:var(--off);border-radius:2px;position:relative;transition:.25s}
+.burger span:before,.burger span:after{content:"";position:absolute;left:0}
+.burger span:before{top:-7px}.burger span:after{top:7px}
+.menu-open .burger span{background:transparent}
+.menu-open .burger span:before{top:0;transform:rotate(45deg)}
+.menu-open .burger span:after{top:0;transform:rotate(-45deg)}
+.drawer{position:fixed;inset:78px 0 0 0;background:var(--navy);z-index:39;padding:30px 22px;transform:translateY(-12px);opacity:0;pointer-events:none;transition:.25s}
+.menu-open .drawer{transform:none;opacity:1;pointer-events:auto}
+.drawer a{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-bottom:1px solid var(--line);font-size:20px;font-weight:600}
+.drawer a small{font-family:Inter;font-size:11px;color:var(--faint);letter-spacing:.14em}
+.drawer .btn-primary{margin-top:30px;width:100%;justify-content:center;border:0;font-size:15px}
+
+/* Hero */
+html,body{overflow-x:hidden}
+.nw{white-space:nowrap}
+.hero{padding:70px 0 40px;border:0;position:relative;overflow:hidden}
+.hero-grid{display:grid;gap:50px}
+.pill{display:inline-flex;align-items:center;gap:10px}
+.pill:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.hero h1{font-size:clamp(40px,7.4vw,66px);line-height:1.32;font-weight:700;margin:26px 0 28px;letter-spacing:-.01em}
+.hero h1 .dot{color:var(--accent)}
+.hero p.lead{color:var(--muted);font-size:15px;max-width:620px}
+.ctas{display:flex;flex-wrap:wrap;align-items:center;gap:26px;margin:34px 0 36px}
+.btn-primary{display:inline-flex;align-items:center;gap:22px;background:var(--accent);color:#fff;padding:16px 22px;border-radius:8px;font-size:14px;font-weight:600;transition:.2s;box-shadow:0 10px 30px -10px rgba(124,92,252,.7)}
+.btn-primary:hover{background:#8c70ff;transform:translateY(-1px)}
+.btn-link{display:inline-flex;align-items:center;gap:14px;font-size:14px;font-weight:500}
+.btn-link:hover{color:#B9A8FF}
+.note{border-left:2px solid var(--purple);padding:6px 0 6px 16px}
+.note div{font-size:14px;color:var(--muted)}
+.note small{font-family:Inter;font-size:10px;letter-spacing:.2em;color:var(--faint);font-weight:600}
+.hero-vis{position:relative;padding:40px 0 10px}
+.hero-vis .tag{position:absolute;top:0;left:12%;z-index:2}
+.orbit{position:absolute;border:1px solid rgba(124,92,252,.18);border-radius:50%;width:520px;height:520px;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.orbit.o2{width:360px;height:360px;border-color:rgba(229,229,232,.06)}
+.glow{position:absolute;width:420px;height:420px;left:50%;top:55%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(124,92,252,.28),transparent 65%);filter:blur(10px);pointer-events:none}
+
+/* Mock dashboard */
+.mock{position:relative;background:#F3F3F6;color:#1b1a2a;border-radius:16px;padding:22px 20px 0;box-shadow:0 40px 80px -30px rgba(0,0,0,.7);font-family:Inter,"Noto Sans Thai",sans-serif;overflow:hidden;transform:rotate(-6deg);max-width:560px;margin:0 auto}
+.mock .demo{position:absolute;top:14px;right:14px;font-size:9px;letter-spacing:.14em;border:1px solid #b9b9c6;border-radius:4px;padding:3px 7px;color:#6b6b7a;font-weight:600}
+.mock .mh{display:flex;align-items:center;gap:12px}
+.mock .mi{width:32px;height:32px;border-radius:9px;background:#E6E0FF;display:grid;place-items:center}
+.mock .mi svg{width:16px;height:16px}
+.mock .mt{font-weight:600;font-size:14px}
+.mock .ms{font-size:11px;color:#7a7a88;margin:6px 0 16px}
+.mock .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mock .k{background:#fff;border:1px solid #e3e3ea;border-radius:9px;padding:12px}
+.mock .k small{display:block;font-size:9px;color:#6b6b7a}
+.mock .k b{display:block;font-size:19px;margin:10px 0 4px;letter-spacing:-.01em}
+.mock .k em{font-style:normal;font-size:8px;color:#9a9aa6}
+.mock .chart{background:#fff;border:1px solid #e3e3ea;border-radius:9px 9px 0 0;margin-top:12px;padding:12px 14px 0;border-bottom:0}
+.mock .ct{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.14em;font-weight:600;color:#3a3a48}
+.mock .ct span{color:#9a9aa6;font-weight:500}
+.mock .bars{display:flex;align-items:flex-end;gap:5%;height:92px;margin-top:10px;background:repeating-linear-gradient(to top,#f0f0f4 0 1px,transparent 1px 30px)}
+.mock .bars div{flex:1;display:flex;align-items:flex-end;gap:3px;height:100%}
+.mock .bars i{flex:1;border-radius:4px 4px 0 0;background:#7C5CFC;transform-origin:bottom;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
+.mock .bars i+i{background:#D5CCFF}
+@keyframes grow{from{transform:scaleY(0)}}
+
+/* Strip */
+.strip{padding:34px 0;border-top:1px solid var(--line)}
+.strip .sub{font-size:12px;margin-bottom:16px}
+.strip ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:18px 20px}
+.strip li{display:flex;align-items:center;gap:12px;font-family:Inter;font-size:11px;letter-spacing:.14em;font-weight:600}
+.strip svg{width:22px;height:22px;color:#B9A8FF;flex:none}
+
+/* About */
+.about h3{font-size:16px;font-weight:600;margin-bottom:12px;line-height:1.7}
+.about p{color:var(--muted);font-size:14px;max-width:760px}
+.tlink{display:inline-flex;align-items:center;gap:14px;color:#B9A8FF;font-size:13px;margin-top:36px;font-weight:500}
+.tlink:hover{color:#fff}
+
+/* Services */
+.cards{display:grid;gap:18px;margin-top:40px}
+.card{background:linear-gradient(160deg,#1E1C2E,#17162A);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px 0;display:flex;flex-direction:column;transition:.25s}
+.card:hover{border-color:rgba(124,92,252,.45);transform:translateY(-3px)}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start}
+.card .top svg{width:30px;height:30px;color:#B9A8FF}
+.card .num{font-family:Inter;font-size:12px;color:var(--faint)}
+.card h3{font-family:Inter;font-size:26px;font-weight:500;margin:26px 0 8px}
+.card h4{font-size:16px;font-weight:600;margin-bottom:16px}
+.card p{color:var(--muted);font-size:13.5px;flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 26px}
+.chips span{font-size:11px;border:1px solid rgba(229,229,232,.2);border-radius:5px;padding:4px 9px;color:var(--muted)}
+.card .foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:20px 0;font-size:13px;font-weight:600;width:100%;text-align:left}
+.card .foot:hover{color:#B9A8FF}
+
+/* Steps */
+.steps{margin-top:30px}
+.step{display:grid;grid-template-columns:40px 1fr 20px;align-items:start;padding:26px 0;border-bottom:1px solid var(--line);gap:4px;transition:.2s}
+.step:hover{padding-left:8px}
+.step .n{font-family:Inter;font-size:12px;color:#B9A8FF;padding-top:4px}
+.step h4{font-size:16px;font-weight:600}
+.step p{font-size:13px;color:var(--muted)}
+.step svg{color:var(--faint);margin-top:4px}
+
+/* Templates */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:34px 0 30px}
+.filters button{padding:12px 18px;border-radius:24px;font-size:13px;color:var(--muted);border:1px solid transparent;transition:.2s}
+.filters button:hover{color:var(--off)}
+.filters button[aria-pressed="true"]{background:#2A2450;border-color:rgba(124,92,252,.6);color:#fff}
+.tgrid{display:grid;gap:22px}
+.tcard{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card);transition:.25s}
+.tcard:hover{border-color:rgba(124,92,252,.45)}
+.tcard[hidden]{display:none}
+.tprev{position:relative;height:330px;overflow:hidden;padding:30px 30px 0}
+.tprev .mock{transform:rotate(-5deg) scale(.9);transform-origin:top center;margin-top:-6px}
+.tprev .cp{position:absolute;left:16px;bottom:14px;z-index:2;background:#12111E;font-family:Inter;font-size:9px;letter-spacing:.16em;padding:6px 9px;border-radius:4px;font-weight:600}
+.tbody{padding:30px 26px 0}
+.tbody .eyebrow{font-size:10px}
+.tbody h3{font-family:Inter;font-size:23px;font-weight:500;margin:18px 0 12px}
+.tbody p{font-size:13.5px;color:var(--muted);padding-bottom:20px;border-bottom:1px solid var(--line)}
+.tbody .foot{display:flex;justify-content:space-between;align-items:center;padding:22px 0;font-size:13px;color:#B9A8FF;width:100%;text-align:left}
+.tbody .foot:hover{color:#fff}
+
+/* Contact */
+.contact{background:linear-gradient(180deg,#191729 0%,#14131F 100%)}
+.trust{display:flex;align-items:center;gap:14px;margin:26px 0 34px}
+.trust svg{width:22px;height:22px;color:#B9A8FF;flex:none}
+.trust b{display:block;font-size:12px;font-weight:600}
+.trust small{font-size:10.5px;color:var(--faint)}
+.panel{background:rgba(27,26,42,.75);border:1px solid var(--line);border-radius:var(--r);padding:30px 22px 34px}
+.panel h5{font-size:14px;font-weight:600;margin-bottom:14px}
+.line-btn{display:flex;align-items:center;justify-content:space-between;background:#4CC764;color:#0e2412;padding:16px 20px;border-radius:7px;font-weight:600;font-size:15px;transition:.2s}
+.line-btn:hover{background:#5bd673}
+.line-btn span{flex:1;text-align:center}
+.panel .hint{font-size:12px;color:var(--muted);margin:12px 0 26px}
+.or{display:flex;align-items:center;gap:14px;font-size:11px;color:var(--faint);margin-bottom:30px}
+.or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
+.panel h3{font-size:24px;font-weight:600}
+.panel .hint2{font-size:12px;color:var(--muted);margin:2px 0 26px}
+label.f{display:block;font-size:12px;font-weight:500;margin-bottom:8px}
+.field{position:relative;margin-bottom:22px}
+.field svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--faint);pointer-events:none}
+input[type=email],select{width:100%;background:#12111E;border:1px solid rgba(229,229,232,.14);border-radius:7px;color:var(--off);font:inherit;font-size:16px;padding:14px 16px;transition:.2s;appearance:none;-webkit-appearance:none}
+input[type=email]{padding-left:42px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+input[type=email]:focus,select:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,252,.2)}
+input.err{border-color:#ff6b81}
+.check{display:flex;gap:14px;align-items:flex-start;font-size:12px;color:var(--muted);margin-bottom:20px;cursor:pointer}
+.check input{width:20px;height:20px;flex:none;margin-top:1px;accent-color:var(--accent)}
+.check a,.ulink{color:#C9BCFF;text-decoration:underline;text-underline-offset:3px}
+.submit{width:100%;justify-content:center;margin-top:12px;gap:20px}
+.submit[disabled]{opacity:.6;cursor:wait}
+.small-c{text-align:center;font-size:10.5px;color:var(--faint);margin-top:12px}
+.msg{display:none;margin-top:18px;padding:14px 16px;border-radius:8px;font-size:13px}
+.msg.ok{display:block;background:rgba(76,199,100,.12);border:1px solid rgba(76,199,100,.4);color:#bdf0c8}
+.msg.bad{display:block;background:rgba(255,107,129,.1);border:1px solid rgba(255,107,129,.4);color:#ffc7d0}
+
+/* FAQ */
+.faq{margin-top:30px}
+.qa{border-bottom:1px solid var(--line)}
+.qa button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:26px 0;font-size:14.5px;font-weight:500;gap:20px}
+.qa button i{font-style:normal;color:#B9A8FF;font-size:20px;transition:.25s;line-height:1}
+.qa.open button i{transform:rotate(45deg)}
+.qa .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s}
+.qa.open .a{grid-template-rows:1fr}
+.qa .a>div{overflow:hidden}
+.qa .a p{font-size:13px;color:var(--muted);padding-bottom:26px}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:42px 0 46px}
+.fgrid{display:flex;justify-content:space-between;gap:30px}
+.ftag{font-family:Inter;font-size:11px;color:var(--faint);margin-top:18px}
+.flinks{display:flex;flex-direction:column;gap:12px;font-size:12px;color:var(--muted);text-align:right}
+.flinks a:hover,.flinks button:hover{color:#fff}
+.copy{font-size:10px;color:var(--faint);margin-top:38px;line-height:1.8}
+
+/* Modal */
+.modal{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(8,8,14,.72);backdrop-filter:blur(6px)}
+.modal.show{display:flex}
+.mbox{background:#1A1929;border:1px solid var(--line);border-radius:16px;max-width:620px;width:100%;max-height:86vh;overflow:auto;padding:32px 28px;position:relative}
+.mbox h3{font-size:22px;margin:10px 0 16px}
+.mbox h4{font-size:14px;margin:20px 0 6px}
+.mbox p,.mbox li{font-size:13px;color:var(--muted)}
+.mbox ul{padding-left:20px}
+.mclose{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:8px;font-size:20px;color:var(--muted)}
+.mclose:hover{background:rgba(255,255,255,.06);color:#fff}
+.mbox .btn-primary{margin-top:24px}
+
+/* Reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+
+/* Desktop */
+@media (min-width:900px){
+  .nav-links{display:flex}
+  .hero{padding:90px 0 70px}
+  .hero-grid{grid-template-columns:1.2fr .8fr;align-items:center}
+  .hero h1{font-size:clamp(44px,4.6vw,58px)}
+  .strip ul{grid-template-columns:repeat(3,auto);justify-content:start;gap:40px}
+  .cards{grid-template-columns:repeat(3,1fr)}
+  .tgrid{grid-template-columns:repeat(3,1fr)}
+  .tprev{height:280px;padding:24px 20px 0}
+  .split{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}
+  .panel{padding:36px 36px 38px}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end}
+}
+@media (min-width:1100px){.burger{display:none}}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header id="top">
+  <div class="wrap nav">
+    <a href="#top" class="logo" aria-label="DATA NIRUN หน้าแรก">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 27v-5M10 27v-8M15 27v-6M20 27v-10M25 27v-14"/><path d="M4 16 11 10l5 4 11-9"/><path d="M22 5h5v5"/></svg>
+      <span>DATA<br>NIRUN<i>.</i></span>
+    </a>
+    <div class="nav-r">
+      <nav class="nav-links" aria-label="เมนูหลัก">
+        <a href="#services">บริการ</a><a href="#approach">แนวทาง</a><a href="#templates">เทมเพลต</a><a href="#faq">คำถามที่พบบ่อย</a>
+      </nav>
+      <a href="#contact" class="btn-ghost">เริ่มต้นคุยกับเรา <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+      <button class="burger" id="burger" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="drawer"><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="drawer" id="drawer">
+  <a href="#about">เกี่ยวกับเรา <small>01</small></a>
+  <a href="#services">บริการของเรา <small>02</small></a>
+  <a href="#approach">แนวทางการทำงาน <small>→</small></a>
+  <a href="#templates">เทมเพลต <small>03</small></a>
+  <a href="#faq">คำถามที่พบบ่อย <small>?</small></a>
+  <a href="#contact" class="btn-primary">เริ่มต้นคุยกับเรา <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+</div>
+
+<main>
+<!-- Hero -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="rv">
+      <div class="eyebrow pill"><b>DATA · SYSTEMS · GROWTH</b></div>
+      <h1>เปลี่ยนข้อมูลที่ยุ่งเหยิง<br>ให้เป็น<span class="hl">ระบบที่เติบโต</span><br>ไปพร้อมธุรกิจคุณ<span class="dot">.</span></h1>
+      <p class="lead">ให้เรื่องหลังบ้านที่ซับซ้อน กลายเป็นเรื่องที่จัดการได้ ด้วยระบบข้อมูล การทำงาน และการเงินที่เชื่อมถึงกัน</p>
+      <div class="ctas">
+        <a href="#contact" class="btn-primary">ค้นหาแนวทางสำหรับธุรกิจคุณ <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        <a href="#services" class="btn-link">สำรวจบริการ <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="note"><div>ออกแบบเพื่อธุรกิจที่พร้อมก้าวต่อ</div><small>SMEs &amp; GROWING TEAMS</small></div>
+    </div>
+    <div class="hero-vis rv">
+      <div class="glow"></div><div class="orbit"></div><div class="orbit o2"></div>
+      <div class="eyebrow tag">FROM COMPLEXITY TO CLARITY ↗</div>
+      <div data-mock="cash"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Strip -->
+<div class="strip">
+  <div class="wrap">
+    <div class="sub">เชื่อมทุกส่วนของธุรกิจให้เติบโตไปด้วยกัน</div>
+    <ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><path d="M6.5 10v4a3 3 0 0 0 3 3H14"/></svg>DATA AUTOMATION</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/><path d="m3 17.5 9 5 9-5" opacity=".5"/></svg>SOP &amp; KPI</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21v-4M8 21v-7M12 21v-5M16 21v-9M20 21v-12"/><path d="m3 11 6-5 4 3 8-6"/></svg>CFO AS A SERVICE</li>
+    </ul>
+  </div>
+</div>
+
+<!-- About -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="eyebrow rv">01 — ABOUT DATA NIRUN</div>
+    <div class="about-grid">
+      <h2 class="rv">เบื้องหลังธุรกิจที่ไปได้ไกล<br>คือ<span class="hl">ระบบที่วางไว้ดี</span></h2>
+      <div class="rv">
+        <h3>เราช่วยเปลี่ยนข้อมูลที่กระจัดกระจาย<br>ให้เป็นภาพที่ชัด และนำไปใช้ต่อได้</h3>
+        <p>DATA NIRUN ทำงานด้านการวางระบบข้อมูลธุรกิจ การจัดระเบียบองค์กร และการบริหารการเงินเชิงกลยุทธ์ เพื่อให้ธุรกิจมองเห็นสิ่งที่เกิดขึ้น และวางรากฐานสำหรับการเติบโต</p>
+      </div>
+    </div>
+    <a href="#services" class="tlink rv">มาดูกันว่าเราช่วยอะไรคุณได้บ้าง <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <div class="wrap">
+    <div class="eyebrow rv">02 — OUR EXPERTISE</div>
+    <h2 class="rv">ระบบที่ดี <span class="nw">เริ่มจาก<span class="hl">โจทย์ของคุณ</span></span></h2>
+    <p class="sub rv">ตั้งแต่ข้อมูลในแต่ละวัน<br>ถึงการตัดสินใจในภาพใหญ่</p>
+    <div class="cards" id="svcCards"></div>
+  </div>
+</section>
+
+<!-- Approach -->
+<section id="approach">
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow rv">A CLEARER WAY FORWARD</div>
+      <h2 class="rv">จากโจทย์ที่ซับซ้อน<br>สู่ก้าวต่อไป<span class="hl">ที่ชัดเจน</span></h2>
+    </div>
+    <div class="steps" id="steps"></div>
+  </div>
+</section>
+
+<!-- Templates -->
+<section id="templates">
+  <div class="wrap">
+    <div class="eyebrow rv">03 — TOOLS FOR YOUR EVERYDAY</div>
+    <h2 class="rv">เริ่มเป็นระบบ ด้วย<span class="hl">เครื่องมือที่ใช่</span></h2>
+    <p class="sub rv">แนวคิดเทมเพลตสำหรับงาน การเงิน และธุรกิจ<br>รายการตัวอย่างระหว่างเตรียมเปิดตัวจริง</p>
+    <div class="filters rv" role="group" aria-label="กรองเทมเพลต">
+      <button data-f="all" aria-pressed="true">ทั้งหมด</button>
+      <button data-f="finance" aria-pressed="false">การเงิน</button>
+      <button data-f="ops" aria-pressed="false">จัดการงาน</button>
+      <button data-f="biz" aria-pressed="false">ธุรกิจ</button>
+    </div>
+    <div class="tgrid" id="tgrid"></div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="contact" id="contact">
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow rv">LET'S MAKE THINGS CLEARER</div>
+      <h2 class="rv">ธุรกิจของคุณ<br>พร้อมเป็นระบบ<span class="hl">ขึ้นอีกขั้น</span></h2>
+      <p class="sub rv">ฝากอีเมลและเรื่องที่คุณสนใจไว้<br>เพื่อให้เราติดต่อกลับเกี่ยวกับแนวทางที่เหมาะกับคุณ</p>
+      <div class="trust rv">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>
+        <div><b>ใช้ข้อมูลเพื่อวัตถุประสงค์ที่คุณยินยอม</b><small>ไม่มีการเลือกความยินยอมไว้ล่วงหน้า</small></div>
+      </div>
+    </div>
+    <div class="panel rv">
+      <h5>คุยกับเราทาง LINE ได้เลย</h5>
+      <a class="line-btn" id="lineBtn" href="#" target="_blank" rel="noopener">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.4L3 21l2-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+        <span>เพิ่มเพื่อน LINE OA</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+      <p class="hint">เปิด LINE เพื่อเพิ่มเพื่อนหรือติดต่อเรา โดยไม่ต้องกรอกอีเมลในหน้านี้</p>
+      <div class="or">หรือฝากอีเมลให้เราติดต่อกลับ</div>
+      <h3>เริ่มต้นจากการพูดคุย</h3>
+      <p class="hint2">เลือกเรื่องที่สนใจ แล้วฝากอีเมลไว้ได้เลย</p>
+      <form id="leadForm" novalidate>
+        <label class="f" for="email">อีเมลของคุณ *</label>
+        <div class="field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+        </div>
+        <label class="f" for="interest">คุณสนใจเรื่องไหน</label>
+        <div class="field">
+          <select id="interest" name="interest">
+            <option>ยังไม่แน่ใจ อยากคุยก่อน</option>
+            <option>Data Automation</option>
+            <option>SOP &amp; KPI</option>
+            <option>CFO as a Service</option>
+            <option>เทมเพลต Google Sheets</option>
+          </select>
+        </div>
+        <label class="check"><input type="checkbox" id="consent" name="consent"><span>ฉันยินยอมให้ DATA NIRUN เก็บและใช้อีเมลเพื่อติดต่อกลับเกี่ยวกับเรื่องที่สนใจ และได้อ่านประกาศความเป็นส่วนตัว (ฉบับร่าง) · <a href="#" data-open="privacy">อ่านประกาศความเป็นส่วนตัว (ฉบับร่าง)</a> *</span></label>
+        <label class="check"><input type="checkbox" id="news" name="newsletter"><span>ฉันต้องการรับข่าวสาร บทความ และอัปเดตสินค้าเพิ่มเติมทางอีเมล (ไม่บังคับ)</span></label>
+        <button type="submit" class="btn-primary submit" id="submitBtn">ฝากอีเมลให้เราติดต่อกลับ <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+        <p class="small-c">ถอนความยินยอมได้ผ่านหน้า <a href="#" class="ulink" data-open="privacy">ความเป็นส่วนตัว</a></p>
+        <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow rv">GOOD TO KNOW</div>
+    <h2 class="rv">ก่อนเริ่มต้นรู้ไว้<span class="hl">อีกนิด</span></h2>
+    <div class="faq" id="faqList"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a href="#top" class="logo" aria-label="DATA NIRUN">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 27v-5M10 27v-8M15 27v-6M20 27v-10M25 27v-14"/><path d="M4 16 11 10l5 4 11-9"/><path d="M22 5h5v5"/></svg>
+          <span>DATA<br>NIRUN<i>.</i></span>
+        </a>
+        <div class="ftag">Clarity in data. Confidence in growth.</div>
+      </div>
+      <div class="flinks">
+        <a href="#services">บริการของเรา</a>
+        <a href="#templates">เทมเพลต</a>
+        <button data-open="privacy" style="text-align:right">ความเป็นส่วนตัว</button>
+      </div>
+    </div>
+    <div class="copy">© <span id="yr">2026</span> DATA NIRUN<br>เว็บไซต์ฉบับร่าง · เนื้อหาปรับเพิ่มเติมได้</div>
+  </div>
+</footer>
+
+<!-- Privacy modal -->
+<div class="modal" id="privacy" role="dialog" aria-modal="true" aria-labelledby="pvTitle">
+  <div class="mbox">
+    <button class="mclose" data-close aria-label="ปิด">×</button>
+    <div class="eyebrow">PRIVACY NOTICE · DRAFT</div>
+    <h3 id="pvTitle">ประกาศความเป็นส่วนตัว (ฉบับร่าง)</h3>
+    <p>DATA NIRUN ให้ความสำคัญกับข้อมูลส่วนบุคคลของคุณ ประกาศนี้อธิบายว่าเราเก็บและใช้ข้อมูลจากแบบฟอร์มบนเว็บไซต์นี้อย่างไร</p>
+    <h4>ข้อมูลที่เราเก็บ</h4>
+    <ul><li>อีเมล</li><li>หัวข้อที่คุณสนใจ</li><li>ตัวเลือกการรับข่าวสาร และวันเวลาที่ให้ความยินยอม</li></ul>
+    <h4>วัตถุประสงค์</h4>
+    <ul><li>ติดต่อกลับเกี่ยวกับเรื่องที่คุณเลือก</li><li>ส่งข่าวสาร บทความ และอัปเดตสินค้า เฉพาะเมื่อคุณเลือกรับเท่านั้น</li></ul>
+    <h4>ระยะเวลาและสิทธิของคุณ</h4>
+    <p>เราเก็บข้อมูลเท่าที่จำเป็นต่อวัตถุประสงค์ข้างต้น คุณขอเข้าถึง แก้ไข ลบ หรือถอนความยินยอมได้ทุกเมื่อ โดยติดต่อเราทาง LINE OA หรือตอบกลับอีเมลที่ได้รับจากเรา</p>
+    <p style="margin-top:16px;font-size:11px;color:var(--faint)">ฉบับร่าง — ควรให้ผู้เชี่ยวชาญด้าน PDPA ตรวจทานก่อนใช้งานจริง</p>
+  </div>
+</div>
+
+<!-- Template modal -->
+<div class="modal" id="tplModal" role="dialog" aria-modal="true" aria-labelledby="tplTitle">
+  <div class="mbox">
+    <button class="mclose" data-close aria-label="ปิด">×</button>
+    <div class="eyebrow" id="tplEye"></div>
+    <h3 id="tplTitle"></h3>
+    <p id="tplDesc"></p>
+    <h4>สิ่งที่จะมีในเทมเพลต</h4>
+    <ul id="tplList"></ul>
+    <p style="margin-top:16px;font-size:12px;color:var(--faint)">เทมเพลตยังไม่เปิดขายและยังไม่มีไฟล์ดาวน์โหลด — ฝากอีเมลไว้เพื่อรับข้อมูลเมื่อพร้อม</p>
+    <button class="btn-primary" id="tplCta">แจ้งฉันเมื่อพร้อม <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   ตั้งค่าตรงนี้
+   SUBMIT_URL : URL ของ Apps Script Web app ที่มี doPost (ดูไฟล์ Code.gs)
+   LINE_URL   : ลิงก์เพิ่มเพื่อน LINE OA เช่น https://lin.ee/xxxx
+   ========================================================= */
+const CONFIG = {
+  SUBMIT_URL: "",
+  LINE_URL: "https://lin.ee/L5Qfxs6"
+};
+
+const ARROW = '<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+const ICONS = {
+  auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><path d="M6.5 10v4a3 3 0 0 0 3 3H14"/></svg>',
+  sop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/><path d="m3 17.5 9 5 9-5"/></svg>',
+  cfo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 21v-4M8 21v-7M12 21v-5M16 21v-9M20 21v-12"/><path d="m3 11 6-5 4 3 8-6"/></svg>'
+};
+
+const SERVICES = [
+  {icon:"auto",n:"01",t:"Data Automation",h:"ให้ข้อมูลทำงานแทนคุณ",p:"วางระบบข้อมูลและเชื่อมงานที่ซ้ำกัน เพื่อให้ทีมมีเวลาโฟกัสกับสิ่งที่สำคัญกว่า",c:["จัดระบบข้อมูล","ลดงานซ้ำ","มองเห็นภาพรวม"],v:"Data Automation"},
+  {icon:"sop",n:"02",t:"SOP & KPI",h:"วางระบบให้ทีมไปต่อได้",p:"จัดระเบียบวิธีทำงาน พร้อมตัวชี้วัดที่เชื่อมเป้าหมายองค์กรกับงานในแต่ละวัน",c:["มาตรฐานการทำงาน","ตัวชี้วัด","พร้อมขยายทีม"],v:"SOP & KPI"},
+  {icon:"cfo",n:"03",t:"CFO as a Service",h:"เห็นตัวเลข เข้าใจธุรกิจ",p:"บริหารจัดการทางการเงินเชิงยุทธศาสตร์ ให้ข้อมูลทางการเงินช่วยประกอบการตัดสินใจ",c:["การเงินธุรกิจ","วางแผน","ตัดสินใจจากข้อมูล"],v:"CFO as a Service"}
+];
+const STEPS = [
+  ["01","เข้าใจโจทย์","เริ่มจากธุรกิจ วิธีทำงาน และสิ่งที่คุณอยากแก้ไข"],
+  ["02","เลือกแนวทาง","พิจารณาระบบหรือเครื่องมือที่เหมาะกับการใช้งาน"],
+  ["03","วางรากฐานเพื่อเติบโต","เชื่อมข้อมูล คน และกระบวนการให้ทำงานร่วมกัน"]
+];
+const TEMPLATES = [
+  {f:"finance",bg:"linear-gradient(160deg,#3A2E5C,#2A2342)",eye:"FINANCE · GOOGLE SHEETS CONCEPT",t:"Cash Flow Planner",p:"แนวคิดเทมเพลตวางแผนเงินเข้า–ออก ให้เห็นสภาพคล่องในที่เดียว",mock:"cash",
+   list:["บันทึกรายรับ–รายจ่ายรายวัน แยกหมวด","สรุปกระแสเงินสดรายเดือนอัตโนมัติ","คาดการณ์สภาพคล่องล่วงหน้า"]},
+  {f:"ops",bg:"linear-gradient(160deg,#2E3A55,#232B40)",eye:"OPERATIONS · GOOGLE SHEETS CONCEPT",t:"Project & Task Tracker",p:"แนวคิดเทมเพลตติดตามงาน ผู้รับผิดชอบ และกำหนดส่งของทีม",mock:"task",
+   list:["รายการงานพร้อมผู้รับผิดชอบและสถานะ","แจ้งเตือนงานใกล้ครบกำหนด","ภาพรวมความคืบหน้าของทั้งทีม"]},
+  {f:"biz",bg:"linear-gradient(160deg,#2C4038,#20302A)",eye:"BUSINESS · GOOGLE SHEETS CONCEPT",t:"Business KPI Dashboard",p:"แนวคิดแดชบอร์ดรวมตัวชี้วัด เพื่อมองภาพรวมธุรกิจได้ชัดขึ้น",mock:"kpi",
+   list:["รวม KPI สำคัญไว้ในหน้าเดียว","เทียบผลลัพธ์กับเป้าหมายรายเดือน","กราฟแนวโน้มที่อัปเดตตามข้อมูล"]}
+];
+const MOCKS = {
+  cash:{t:"Cash flow overview",s:"A clearer view of your business.",k:[["ภาพรวม","128,500"],["เป้าหมาย","95,200"],["ความคืบหน้า","+18%"]],c:"MONTHLY OVERVIEW"},
+  task:{t:"Project workspace",s:"Your team, in sync.",k:[["ภาพรวม","24"],["เป้าหมาย","08"],["ความคืบหน้า","67%"]],c:"TASK PROGRESS"},
+  kpi:{t:"Business performance",s:"A clearer view of your business.",k:[["ภาพรวม","128,500"],["เป้าหมาย","95,200"],["ความคืบหน้า","+18%"]],c:"MONTHLY OVERVIEW"}
+};
+const BARS = [[22,14],[48,30],[44,30],[78,56],[70,50],[92,66]];
+const FAQ = [
+  ["ยังไม่แน่ใจว่าต้องใช้บริการแบบไหน เริ่มอย่างไรดี?","เลือก “ยังไม่แน่ใจ อยากคุยก่อน” ในฟอร์ม แล้วฝากอีเมลไว้ เราจะเริ่มจากทำความเข้าใจโจทย์ของธุรกิจคุณ"],
+  ["เทมเพลตบนหน้าเว็บเปิดขายแล้วหรือยัง?","รายการในหน้านี้เป็นแนวคิดตัวอย่าง ยังไม่เปิดขายและยังไม่มีไฟล์ดาวน์โหลด สามารถฝากอีเมลเพื่อรับข้อมูลเมื่อมีรายละเอียดจริงได้"],
+  ["ใช้ข้อมูลที่ฝากไว้ทำอะไรบ้าง?","ใช้เพื่อติดต่อกลับเรื่องที่คุณเลือกเท่านั้น การรับข่าวสารเพิ่มเติมเป็นตัวเลือกแยกและไม่บังคับ อ่านรายละเอียดและขอถอนความยินยอมได้ในหน้าความเป็นส่วนตัว"]
+];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function mockHTML(key){
+  const m = MOCKS[key];
+  return `<div class="mock" aria-hidden="true"><span class="demo">DEMO</span>
+    <div class="mh"><div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="#7C5CFC" stroke-width="2"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M9 13h6M9 17h6M9 9h2"/></svg></div><div class="mt">${m.t}</div></div>
+    <div class="ms">${m.s}</div>
+    <div class="kpis">${m.k.map(k=>`<div class="k"><small>${k[0]}</small><b>${k[1]}</b><em>ข้อมูลตัวอย่าง</em></div>`).join("")}</div>
+    <div class="chart"><div class="ct">${m.c}<span>JAN — JUN</span></div>
+      <div class="bars">${BARS.map((b,i)=>`<div><i style="height:${b[0]}%;animation-delay:${i*.08}s"></i><i style="height:${b[1]}%;animation-delay:${i*.08+.04}s"></i></div>`).join("")}</div>
+    </div></div>`;
+}
+
+// Render
+document.querySelectorAll("[data-mock]").forEach(el => el.outerHTML = mockHTML(el.dataset.mock));
+$("#svcCards").innerHTML = SERVICES.map(s=>`
+  <article class="card rv">
+    <div class="top">${ICONS[s.icon]}<span class="num">${s.n}</span></div>
+    <h3>${esc(s.t)}</h3><h4>${s.h}</h4><p>${s.p}</p>
+    <div class="chips">${s.c.map(c=>`<span>${c}</span>`).join("")}</div>
+    <button class="foot" data-interest="${esc(s.v)}">สนใจบริการนี้ ${ARROW}</button>
+  </article>`).join("");
+$("#steps").innerHTML = STEPS.map(s=>`
+  <a href="#contact" class="step rv"><span class="n">${s[0]}</span><div><h4>${s[1]}</h4><p>${s[2]}</p></div>${ARROW}</a>`).join("");
+$("#tgrid").innerHTML = TEMPLATES.map((t,i)=>`
+  <article class="tcard rv" data-cat="${t.f}">
+    <div class="tprev" style="background:${t.bg}">${mockHTML(t.mock)}<span class="cp">CONCEPT PREVIEW</span></div>
+    <div class="tbody"><div class="eyebrow">${t.eye}</div><h3>${t.t}</h3><p>${t.p}</p>
+      <button class="foot" data-tpl="${i}">ดูแนวคิดเทมเพลต ${ARROW}</button></div>
+  </article>`).join("");
+$("#faqList").innerHTML = FAQ.map((q,i)=>`
+  <div class="qa rv"><button aria-expanded="false" aria-controls="fa${i}">${q[0]}<i>+</i></button>
+  <div class="a" id="fa${i}"><div><p>${q[1]}</p></div></div></div>`).join("");
+$("#yr").textContent = new Date().getFullYear();
+
+// LINE
+const lineBtn = $("#lineBtn");
+if (CONFIG.LINE_URL) lineBtn.href = CONFIG.LINE_URL;
+else lineBtn.addEventListener("click", e => { e.preventDefault(); showMsg("bad","ยังไม่ได้ใส่ลิงก์ LINE OA — ตั้งค่า LINE_URL ในไฟล์นี้ก่อนเผยแพร่"); $("#formMsg").scrollIntoView({behavior:"smooth",block:"center"}); });
+
+// Menu
+const body = document.body, burger = $("#burger");
+function setMenu(open){ body.classList.toggle("menu-open",open); burger.setAttribute("aria-expanded",open); body.style.overflow = open ? "hidden" : ""; }
+burger.addEventListener("click", () => setMenu(!body.classList.contains("menu-open")));
+document.querySelectorAll("#drawer a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+
+// Filters
+document.querySelectorAll(".filters button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x===b));
+  document.querySelectorAll(".tcard").forEach(c => c.hidden = !(b.dataset.f==="all" || c.dataset.cat===b.dataset.f));
+}));
+
+// FAQ
+document.querySelectorAll(".qa button").forEach(b => b.addEventListener("click", () => {
+  const qa = b.parentElement, open = !qa.classList.contains("open");
+  qa.classList.toggle("open", open); b.setAttribute("aria-expanded", open);
+}));
+
+// Interest → form
+function goForm(interest){
+  if (interest) $("#interest").value = interest;
+  $("#contact").scrollIntoView({behavior:"smooth"});
+  setTimeout(() => $("#email").focus({preventScroll:true}), 700);
+}
+document.querySelectorAll("[data-interest]").forEach(b => b.addEventListener("click", () => goForm(b.dataset.interest)));
+
+// Modals
+let lastFocus;
+function openModal(id){ lastFocus = document.activeElement; const m = $("#"+id); m.classList.add("show"); body.style.overflow="hidden"; m.querySelector(".mclose").focus(); }
+function closeModals(){ document.querySelectorAll(".modal.show").forEach(m => m.classList.remove("show")); body.style.overflow=""; lastFocus && lastFocus.focus && lastFocus.focus(); }
+document.querySelectorAll("[data-open]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); openModal(a.dataset.open); }));
+document.querySelectorAll(".modal").forEach(m => m.addEventListener("click", e => { if (e.target===m || e.target.hasAttribute("data-close")) closeModals(); }));
+document.addEventListener("keydown", e => { if (e.key==="Escape") { closeModals(); setMenu(false); } });
+document.querySelectorAll("[data-tpl]").forEach(b => b.addEventListener("click", () => {
+  const t = TEMPLATES[b.dataset.tpl];
+  $("#tplEye").textContent = t.eye; $("#tplTitle").textContent = t.t; $("#tplDesc").textContent = t.p;
+  $("#tplList").innerHTML = t.list.map(x=>`<li>${x}</li>`).join("");
+  openModal("tplModal");
+}));
+$("#tplCta").addEventListener("click", () => { closeModals(); goForm("เทมเพลต Google Sheets"); });
+
+// Form
+function showMsg(type, text){ const m = $("#formMsg"); m.className = "msg " + type; m.textContent = text; }
+$("#leadForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("#email"), consent = $("#consent");
+  email.classList.remove("err");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) { email.classList.add("err"); email.focus(); return showMsg("bad","กรุณากรอกอีเมลให้ถูกต้อง"); }
+  if (!consent.checked) { consent.focus(); return showMsg("bad","กรุณายืนยันความยินยอมก่อนส่งข้อมูล"); }
+  if (!CONFIG.SUBMIT_URL) return showMsg("bad","ฟอร์มยังไม่ได้เชื่อมกับระบบรับข้อมูล — ตั้งค่า SUBMIT_URL ในไฟล์นี้ก่อนเผยแพร่ (ข้อมูลยังไม่ถูกส่ง)");
+  const btn = $("#submitBtn"); btn.disabled = true;
+  const data = new URLSearchParams({
+    email: email.value.trim(), interest: $("#interest").value,
+    consent: "yes", newsletter: $("#news").checked ? "yes" : "no",
+    page: location.href, ua: navigator.userAgent
+  });
+  try {
+    await fetch(CONFIG.SUBMIT_URL, { method:"POST", mode:"no-cors", body:data });
+    showMsg("ok","ขอบคุณครับ เราได้รับอีเมลของคุณแล้ว และจะติดต่อกลับเร็ว ๆ นี้");
+    e.target.reset();
+  } catch (err) {
+    showMsg("bad","ส่งข้อมูลไม่สำเร็จ กรุณาลองใหม่ หรือทักเราทาง LINE OA");
+  } finally { btn.disabled = false; }
+});
+
+// Reveal on scroll
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), {threshold:.12}) : null;
+document.querySelectorAll(".rv").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+</script>
+</body>
+</html>
